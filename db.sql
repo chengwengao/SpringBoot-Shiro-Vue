@@ -55,7 +55,8 @@ CREATE TABLE `sys_role` (
   `role_name` varchar(20) DEFAULT NULL COMMENT '角色名',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `delete_status` varchar(1) DEFAULT '1' COMMENT '是否有效  1有效  2无效',
+  `status` smallint(2) DEFAULT '1' COMMENT '状态，  1:启用 ， 0：停用',
+  `del_flag` smallint(2) DEFAULT NULL COMMENT '删除标记，1：已删除，0：正常',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='后台角色表';
 
@@ -63,7 +64,11 @@ CREATE TABLE `sys_role` (
 # Data for table "sys_role"
 #
 
-INSERT INTO `sys_role` VALUES (1,'管理员','2017-11-22 16:24:34','2017-11-22 16:24:52','1'),(2,'作家','2017-11-22 16:24:34','2017-11-22 16:24:52','1'),(3,'程序员','2017-11-22 16:28:47','2017-11-22 16:28:47','1');
+INSERT INTO `sys_role` VALUES ('1', '管理员', '2017-11-22 16:24:34', '2018-09-20 06:12:30', '1', '0');
+INSERT INTO `sys_role` VALUES ('2', '作家', '2017-11-22 16:24:34', '2018-09-20 06:12:30', '1', '0');
+INSERT INTO `sys_role` VALUES ('3', '程序员', '2017-11-22 16:28:47', '2018-09-20 07:47:45', '0', '0');
+INSERT INTO `sys_role` VALUES ('4', '建筑师', '2018-09-20 01:25:01', '2018-09-20 06:12:31', '1', '0');
+INSERT INTO `sys_role` VALUES ('22', '角色测试五', '2018-09-20 08:20:13', '2018-09-20 08:20:47', '1', '0');
 
 #
 # Structure for table "sys_role_permission"
