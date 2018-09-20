@@ -55,8 +55,8 @@ CREATE TABLE `sys_role` (
   `role_name` varchar(20) DEFAULT NULL COMMENT '角色名',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `status` smallint(2) DEFAULT '1' COMMENT '状态，  1:启用 ， 0：停用',
-  `del_flag` smallint(2) DEFAULT NULL COMMENT '删除标记，1：已删除，0：正常',
+  `status` smallint(2) DEFAULT '1' COMMENT '状态，1:启用 ， 0：停用',
+  `del_flag` smallint(2) DEFAULT '0' COMMENT '删除标记，1：已删除，0：正常',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='后台角色表';
 
@@ -104,7 +104,8 @@ CREATE TABLE `sys_user` (
   `role_id` int(11) DEFAULT '0' COMMENT '角色ID',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  `delete_status` varchar(1) DEFAULT '1' COMMENT '是否有效  1有效  2无效',
+  `status` smallint(2) DEFAULT '1' COMMENT '状态，1:启用，0：停用',
+  `del_flag` smallint(2) DEFAULT '0' COMMENT '删除标记，1：已删除，0：正常',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10008 DEFAULT CHARSET=utf8 COMMENT='运营后台用户表';
 

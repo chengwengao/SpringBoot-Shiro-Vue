@@ -25,6 +25,12 @@
       </el-table-column>
       <el-table-column align="center" label="创建时间" prop="createTime" width="170"></el-table-column>
       <el-table-column align="center" label="最近修改时间" prop="updateTime" width="170"></el-table-column>
+      <el-table-column align="center" label="状态" prop="status" width="100">
+        <template slot-scope="scope">
+          <el-tag type="success" v-if="scope.row.status===1">启用</el-tag>
+          <el-tag type="info" v-else>停用</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="管理" width="220" v-if="hasPerm('user:update')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
@@ -72,6 +78,16 @@
           <el-input type="text" v-model="tempUser.nickname">
           </el-input>
         </el-form-item>
+        <el-form-item label="状态" required >
+          <el-select v-model="tempUser.status" placeholder="请选择">
+            <el-option
+              v-for="item in statusList"
+              :key="item.code"
+              :label="item.name"
+              :value="item.code">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -106,8 +122,21 @@
           password: '',
           nickname: '',
           roleId: '',
-          userId: ''
-        }
+          userId: '',
+          status: '',
+          delFlag: ''
+        },
+        //角色状态，TODO:整合字典表
+        statusList:[
+            {
+                code: 1,
+                name:'启用'
+            },
+            {
+                code: 0,
+                name:'停用'
+            }
+        ]
       }
     },
     created() {
@@ -169,16 +198,20 @@
         this.tempUser.nickname = "";
         this.tempUser.roleId = "";
         this.tempUser.userId = "";
+        this.tempUser.status = "";
+        this.tempUser.delFlag = "0";
         this.dialogStatus = "create"
         this.dialogFormVisible = true
       },
       showUpdate($index) {
         let user = this.list[$index];
         // this.tempUser = user;  //去除编辑弹框与列表数据的双向绑定
-        this.tempUser.deleteStatus = '1';
+        this.tempUser.delFlag = user.delFlag;
         this.tempUser.password = '';
         this.tempUser.userId = user.userId;
         this.tempUser.nickname = user.nickname;
+        this.tempUser.status = user.status;
+        this.tempUser.delFlag = user.delFlag;
         this.dialogStatus = "update"
         this.dialogFormVisible = true
       },
@@ -224,7 +257,7 @@
           type: 'warning'
         }).then(() => {
           let user = _vue.list[$index];
-          user.deleteStatus = '2';
+          user.delFlag = '1';
           _vue.api({
             url: "/user/updateUser",
             method: "post",
