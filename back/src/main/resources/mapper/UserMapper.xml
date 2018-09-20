@@ -52,9 +52,13 @@
     <select id="getAllRoles" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             id        roleId,
-            role_name roleName
+            role_name roleName,
+            create_time createTime,
+            update_time updateTime,
+            status,
+            del_flag delFlag
         FROM sys_role
-        WHERE delete_status='1'
+        WHERE del_flag='0'
     </select>
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
@@ -78,6 +82,10 @@
     <resultMap id="roleMap" type="com.heeexy.example.util.model.One2Many">
         <id column="roleId" property="roleId"/>
         <result column="roleName" property="roleName"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="del_flag" property="delFlag"/>
         <collection property="users" ofType="com.alibaba.fastjson.JSONObject">
             <id column="userId" property="userId"/>
             <result column="nickname" property="nickname"/>
@@ -95,6 +103,10 @@
         SELECT
             r.id              roleId,
             r.role_name       roleName,
+            DATE_FORMAT(r.create_time, '%Y.%m.%d %T')     createTime,
+            DATE_FORMAT(r.update_time, '%Y.%m.%d %T')     updateTime,
+            r.status,
+            r.del_flag        delFlag,
             u.id              userId,
             u.nickname        nickname,
             p.id              permissionId,
@@ -105,7 +117,7 @@
             LEFT JOIN sys_user u ON r.id = u.role_id AND u.delete_status = '1'
             LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.delete_status = '1'
             LEFT JOIN sys_permission p ON rp.permission_id = p.id
-        WHERE r.delete_status = '1'
+        WHERE r.del_flag = '0'
         ORDER BY r.id, p.id
     </select>
     <resultMap id="permissionMap" type="com.heeexy.example.util.model.One2Many">
@@ -165,7 +177,7 @@
     <update id="removeRole">
         UPDATE sys_role
         SET
-            delete_status = '2'
+            del_flag = '1'
         WHERE id = #{roleId}
     </update>
     <update id="removeRoleAllPermission">

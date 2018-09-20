@@ -47,16 +47,23 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/user/',
     name: '',
-    meta: {title: '用户权限', icon: 'table'},
+    meta: {title: '系统管理', icon: 'table'},
     children: [
       {
-        path: '', name: '用户列表', component: _import('user/user'), meta: {title: '用户列表', icon: 'user'}, menu: 'user'
+        path: '', name: '用户管理', component: _import('user/user'), meta: {title: '用户管理', icon: 'user'}, menu: 'user'
       },
       {
         path: 'role',
-        name: '权限管理',
+        name: '角色权限管理',
         component: _import('user/role'),
-        meta: {title: '权限管理', icon: 'password'},
+        meta: {title: '角色权限管理', icon: 'password'},
+        menu: 'role'
+      },
+      {
+        path: 'listRole',
+        name: '角色管理',
+        component: _import('role/role'),
+        meta: {title: '角色管理', icon: 'role'},
         menu: 'role'
       },
     ]

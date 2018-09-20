@@ -1,5 +1,5 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
-var path = require('path')
+var path = require('path')  //Node.js path 模块提供了一些用于处理文件路径的小工具
 module.exports = {
   build: {
     env: require('./prod.env'),
@@ -24,13 +24,13 @@ module.exports = {
     env: require('./dev.env'),
     host: 'localhost',
     port: 9520,
-    autoOpenBrowser: true,
+    autoOpenBrowser: false,
     autoOpenPage: '/login',
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8088',
         pathRewrite: {
           '^/api': '/'
         }
