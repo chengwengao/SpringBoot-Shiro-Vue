@@ -6,7 +6,7 @@
     <select id="countUser" resultType="Integer">
         SELECT count(0)
         FROM sys_user u
-        WHERE u.delete_status = '1'
+        WHERE u.del_flag = '0'
     </select>
 
     <resultMap id="userMap" type="com.heeexy.example.util.model.One2Many">
@@ -18,7 +18,8 @@
         <result column="createTime" property="createTime"/>
         <result column="updateTime" property="updateTime"/>
         <result column="lastLoginTime" property="lastLoginTime"/>
-        <result column="deleteStatus" property="deleteStatus"/>
+        <result column="status" property="status"/>
+        <result column="del_flag" property="delFlag"/>
         <collection property="permissionList" ofType="String">
             <id column="permissionName" property="permissionName"/>
         </collection>
@@ -34,11 +35,12 @@
                      username                                username,
                      nickname                                nickname,
                      role_id                                 roleId,
-                     delete_status                           deleteStatus,
+                     status,
+                     del_flag                                delFlag,
                      DATE_FORMAT(create_time, '%Y.%m.%d %T') createTime,
                      DATE_FORMAT(update_time, '%Y.%m.%d %T') updateTime
                  FROM sys_user
-                 WHERE delete_status = '1'
+                 WHERE del_flag = '0'
                  ORDER BY id
                  LIMIT #{offSet}, #{pageRow}
              ) u
@@ -63,8 +65,8 @@
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO sys_user
-        (username, password, nickname, role_id) VALUES
-            (#{username}, #{password}, #{nickname}, #{roleId})
+        (username, password, nickname, role_id, status, del_flag) VALUES
+            (#{username}, #{password}, #{nickname}, #{roleId}, #{status}, #{delFlag})
     </insert>
 
     <update id="updateUser">
@@ -76,7 +78,8 @@
         </if>
 
         , role_id = #{roleId}
-        , delete_status = #{deleteStatus}
+        , status = #{status}
+        , del_flag = #{delFlag}
         WHERE id = #{userId}
     </update>
     <resultMap id="roleMap" type="com.heeexy.example.util.model.One2Many">
@@ -114,7 +117,7 @@
             p.menu_name       menuName,
             p.permission_name permissionName
         FROM sys_role r
-            LEFT JOIN sys_user u ON r.id = u.role_id AND u.delete_status = '1'
+            LEFT JOIN sys_user u ON r.id = u.role_id AND u.del_flag = '0'
             LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.delete_status = '1'
             LEFT JOIN sys_permission p ON rp.permission_id = p.id
         WHERE r.del_flag = '0'
@@ -168,7 +171,7 @@
             u.id        userId,
             p.id        permissionId
         FROM sys_role r
-            LEFT JOIN sys_user u ON r.id = u.role_id AND u.delete_status = '1'
+            LEFT JOIN sys_user u ON r.id = u.role_id AND u.del_flag = '0'
             LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.delete_status = '1'
             LEFT JOIN sys_permission p ON rp.permission_id = p.id
         WHERE r.id = #{roleId}
@@ -208,6 +211,6 @@
         select count(0)
          from sys_user
          WHERE username=#{username}
-         AND delete_status='1';
+         AND del_flag='0';
     </select>
 </mapper>
