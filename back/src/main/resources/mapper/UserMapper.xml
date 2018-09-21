@@ -19,7 +19,7 @@
         <result column="updateTime" property="updateTime"/>
         <result column="lastLoginTime" property="lastLoginTime"/>
         <result column="status" property="status"/>
-        <result column="del_flag" property="delFlag"/>
+        <result column="delFlag" property="delFlag"/>
         <collection property="permissionList" ofType="String">
             <id column="permissionName" property="permissionName"/>
         </collection>
