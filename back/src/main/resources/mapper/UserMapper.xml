@@ -118,7 +118,7 @@
             p.permission_name permissionName
         FROM sys_role r
             LEFT JOIN sys_user u ON r.id = u.role_id AND u.del_flag = '0'
-            LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.delete_status = '1'
+            LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.status = '1'
             LEFT JOIN sys_permission p ON rp.permission_id = p.id
         WHERE r.del_flag = '0'
         ORDER BY r.id, p.id
@@ -172,7 +172,7 @@
             p.id        permissionId
         FROM sys_role r
             LEFT JOIN sys_user u ON r.id = u.role_id AND u.del_flag = '0'
-            LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.delete_status = '1'
+            LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.status = '1'
             LEFT JOIN sys_permission p ON rp.permission_id = p.id
         WHERE r.id = #{roleId}
     </select>
@@ -186,14 +186,14 @@
     <update id="removeRoleAllPermission">
         UPDATE sys_role_permission
         SET
-            delete_status = '2'
+            status = '0'
         WHERE role_id = #{roleId}
     </update>
 
     <update id="removeOldPermission">
         UPDATE sys_role_permission
         SET
-        delete_status = '2'
+        status = '0'
         WHERE role_id = #{roleId}
         AND permission_id in (
         <foreach collection="permissions" item="item" index="index" separator=",">
